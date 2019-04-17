@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+  db:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+  
+  nginx:
+    container_name: nginx-container
+    build: ./nginx
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - django_data:/app
+      - ./log:/var/log/nginx
+    depends_on:
+      - app
+
+  app:
+    container_name: app-container
+    build: ./djangoapp
+    restart: always
+    command: uwsgi --ini uwsgi.ini
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./djangoapp:/app
+      - django_data:/app
+    depends_on:
+      - db
+
+  # redis:
+  #   container_name: redis
+  #   image: redis:latest
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - app-redis:/data
+
+  rabbit:
+    container_name: rabbit
+    image: rabbitmq:latest
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=password123
+    ports:
+      - "5673:5672"
+
+  celery:
+    container_name: celery
+    build: ./djangoapp
+    command: celery worker -A config.celeryconf --loglevel=info
+    restart: unless-stopped
+    volumes:
+      - ./djangoapp:/app
+    depends_on:
+      - app
+      - rabbit
+
+volumes:
+  django_data:
+  pgdata:
+  app-redis:

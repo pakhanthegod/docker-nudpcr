@@ -1,0 +1,7 @@
+Django==2.2
+pytz==2019.1
+sqlparse==0.3.0
+uwsgi
+psycopg2
+celery
+django-celery-results
