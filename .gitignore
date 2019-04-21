@@ -3,5 +3,4 @@
 log
 **/__pycache__/
 static
-djangoapp/testwork
 djangoapp/app.sock

@@ -1,0 +1,32 @@
+{% comment %}
+{% extends "base.html" %}
+{% load bootstrap_pagination from bootstrap4 %}
+{% load build_absolute_uri from urls %}
+{% load get_object_properties from attributes %}
+{% load get_thumbnail from product_images %}
+{% load i18n %}
+{% load shop %}
+{% load static %}
+
+{% block footer_scripts %}
+  {{ block.super }}
+{% endblock footer_scripts %}
+
+{% block title %}
+  {{ block.super }}
+{% endblock %}
+
+{% block content %}
+{% endcomment %}
+  <div class="fetch-data-page">
+      <div class="row">
+        <div class="col-md-8 col-lg-9">
+            <code>
+                {{ data }}
+            </code>
+        </div>
+      </div>
+  </div>
+{% comment %}
+{% endblock content %}
+{% endcomment %}
