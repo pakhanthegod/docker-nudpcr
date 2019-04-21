@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_celery_results',
     'core.apps.CoreConfig',
+    'testwork.apps.TestworkConfig',
 ]
 
 MIDDLEWARE = [
@@ -133,12 +133,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # REDIS_HOST = 'redis'
 
 # Celery
-BROKER_HOST = 'rabbit'
-BROKER_PORT = 5672
-BROKER_USER = 'admin'
-BROKER_PASSWORD = 'password123'
+# BROKER_HOST = 'redis'
+# BROKER_USER = 'admin'
+# BROKER_PASSWORD = 'password123'
 
-CELERY_RESULTS_BACKEND = 'db'
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

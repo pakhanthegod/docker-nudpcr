@@ -1,4 +1,4 @@
-version: '3'
+version: '3.2'
 
 services:
   db:
@@ -18,9 +18,14 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - django_data:/app
+      - type: volume
+        source: django_data
+        target: /app
+        volume:
+          nocopy: true
       - ./log:/var/log/nginx
     depends_on:
+      - celery
       - app
 
   app:
@@ -36,22 +41,20 @@ services:
     depends_on:
       - db
 
-  # redis:
-  #   container_name: redis
-  #   image: redis:latest
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - app-redis:/data
-
-  rabbit:
-    container_name: rabbit
-    image: rabbitmq:latest
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=password123
+  redis:
+    container_name: redis
+    image: redis:latest
     ports:
-      - "5673:5672"
+      - "6379:6379"
+
+  # rabbit:
+  #   container_name: rabbit
+  #   image: rabbitmq:latest
+  #   environment:
+  #     - RABBITMQ_DEFAULT_USER=admin
+  #     - RABBITMQ_DEFAULT_PASS=password123
+  #   ports:
+  #     - "5673:5672"
 
   celery:
     container_name: celery
@@ -60,11 +63,12 @@ services:
     restart: unless-stopped
     volumes:
       - ./djangoapp:/app
+      - django_data:/app
     depends_on:
       - app
-      - rabbit
+      - redis
 
 volumes:
-  django_data:
   pgdata:
   app-redis:
+  django_data:

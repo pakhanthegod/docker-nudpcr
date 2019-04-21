@@ -7,6 +7,6 @@ app = Celery('config')
 
 CELERY_TIMEZONE = 'Europe/Moscow'
 
-app.config_from_object('django.conf:settings')
+app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.autodiscover_tasks()

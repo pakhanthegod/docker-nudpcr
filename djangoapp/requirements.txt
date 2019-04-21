@@ -2,6 +2,6 @@ Django==2.2
 pytz==2019.1
 sqlparse==0.3.0
 uwsgi
-psycopg2
+psycopg2-binary
 celery
-django-celery-results
+redis
